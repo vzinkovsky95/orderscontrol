@@ -74,7 +74,6 @@ def get_file_extension(url):
 
 
 def download_kvit(transaction_id, partner_order_id, customer_code, document_url, cnx):
-    """Скачивает квитанцию, вычисляет MD5 и сохраняет в файловую систему и БД."""
     user_folder = BASE_DIR / f"{customer_code}_receipts"
     user_folder.mkdir(exist_ok=True)
 
@@ -134,7 +133,6 @@ def download_kvit(transaction_id, partner_order_id, customer_code, document_url,
         return False
 
 def process_new_transactions():
-    """Скачивает квитанции для новых транзакций."""
     try:
         cnx = mysql.connector.connect(**DB_CONFIG)
         cursor = cnx.cursor(dictionary=True)
@@ -163,7 +161,6 @@ def process_new_transactions():
 
 
 def process_failed_downloads():
-    """Пытается повторно скачать квитанции, которые не удалось скачать ранее."""
     try:
         cnx = mysql.connector.connect(**DB_CONFIG)
         cursor = cnx.cursor(dictionary=True)
@@ -196,14 +193,13 @@ def process_failed_downloads():
 if __name__ == "__main__":
 
     while True:
-        # Создаем и запускаем потоки
+
         thread_new = threading.Thread(target=process_new_transactions, name="НовыеТранзакции")
         thread_failed = threading.Thread(target=process_failed_downloads, name="ПовторныеЗагрузки")
 
         thread_new.start()
         thread_failed.start()
 
-        # Ждем завершения потоков
         thread_new.join()
         thread_failed.join()
 
