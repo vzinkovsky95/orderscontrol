@@ -1,6 +1,3 @@
-
----Перед созданием триггеров необходимо остановить скрипт, который добавляет записи в orderstable. заполняем таблицу customers данными. создаем триггеры в таблице orderstable. Запускам скрипт.
-
 INSERT INTO customers (customer_code, completed_orders, total_orders, lastcompleted_order, last_order, minamount, maxamount, avgamount)
 SELECT
     customer_code,
@@ -57,5 +54,6 @@ BEGIN
         avgamount = (SELECT AVG(payment_amount) FROM orderstable WHERE customer_code = NEW.customer_code AND status = 1)
     WHERE customer_code = NEW.customer_code;
 END //
+
 
 DELIMITER ;
